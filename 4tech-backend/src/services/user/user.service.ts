@@ -14,8 +14,8 @@ export class UserService {
         return this.userRepository.getUsers()
     }
 
-    createNewUser(newUser: UserViewModel){
-        const userList = this.userRepository.getUsers()
+    async createNewUser(newUser: UserViewModel){
+        const userList = await this.userRepository.getUsers()
 
         const existingUser = userList.find(x => x.userName === newUser.userName)
 
@@ -26,8 +26,8 @@ export class UserService {
         return this.userRepository.createUser(newUser)
     }
 
-    attemptLogin(login: LoginViewModel) {
-        const userList = this.userRepository.getUsers()
+    async attemptLogin(login: LoginViewModel) {
+        const userList = await this.userRepository.getUsers()
 
         const foundLogin = userList.find(x => 
             x.userLogin === login.userLogin
@@ -36,6 +36,31 @@ export class UserService {
         
         return foundLogin
     }
-
-    
 }
+
+///////////////////////////////////////////////////////////////////////////////////
+/*
+    deleteUser(delUser: UserViewModel){
+        const userList: UserViewModel[] = this.userRepository.getUsers();
+
+        const originalSize = userList.length;
+
+        // FIND USER
+        // Se nao tiver, nao existe = throw new exception
+        // se tiver, prossegue
+
+        const existingUser = userList.filter(x => 
+            (x.userName !== delUser.userName && 
+            x.userLogin !== delUser.userLogin && 
+            x.password !== delUser.password));
+
+        const newSize = existingUser.length;
+
+        if(originalSize > newSize){
+            return 'User successfully removed';
+        } else{
+            throw new BadRequestException('User not found');
+        }
+        
+    }
+*////////////////////////////////////////////////////////////////////////////////////
